@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Hvelog</title>
+  <style>
+    body {
+      font-family: Tahoma;
+      direction: rtl;
+      background: #111;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: aqua;
+    }
+
+    .post {
+      background: #222;
+      padding: 15px;
+      margin: 15px auto;
+      border-radius: 12px;
+      max-width: 500px;
+    }
+
+    input, textarea {
+      margin: 10px 0;
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      border: none;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    button {
+      background: aqua;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+
+    footer {
+      margin-top: 50px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <img src="hvelog-logo.png" alt="لوگو" class="logo">
+  <h1>خاطرات عجیب شما</h1>
+
+  <input id="titleInput" type="text" placeholder="عنوان پست">
+  <br>
+  <textarea id="contentInput" placeholder="متن پست شما..." rows="4"></textarea>
+  <br>
+  <button onclick="addPost()">افزودن پست</button>
+
+  <div id="posts"></div>
+
+  <footer>
+    <p>ارتباط با ما: hsnshapwrjany97@gmail.com</p>
+    <p>در باره ما: این وب‌سایت برای ثبت خاطرات شما ساخته شده است.<br>
+    به هیچ وجه از شما و خاطراتتان سوء استفاده نمی‌شود.<br>
+    این وب‌سایت کاملاً امن است.</p>
+    <p>ساخته شده توسط Hvelog.com</p>
+  </footer>
+
+  <script>
+    let posts = [];
+
+    function loadPosts() {
+      const saved = localStorage.getItem('posts');
+      if (saved) {
+        posts = JSON.parse(saved);
+        posts.forEach(post => renderPost(post.title, post.text));
+      }
+    }
+
+    function renderPost(title, text) {
+      const postDiv = document.createElement("div");
+      postDiv.className = "post";
+
+      const titleElem = document.createElement("h3");
+      titleElem.textContent = title;
+
+      const textElem = document.createElement("p");
+      textElem.textContent = text;
+
+      postDiv.appendChild(titleElem);
+      postDiv.appendChild(textElem);
+      document.getElementById("posts").appendChild(postDiv);
+    }
+
+    function addPost() {
+      const title = document.getElementById("titleInput").value.trim();
+      const text = document.getElementById("contentInput").value.trim();
+
+      if (title && text) {
+        const post = { title, text };
+        posts.push(post);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        renderPost(title, text);
+
+        document.getElementById("titleInput").value = "";
+        document.getElementById("contentInput").value = "";
+      }
+    }
+
+    window.onload = loadPosts;
+  </script>
+
+</body>
+</html>
